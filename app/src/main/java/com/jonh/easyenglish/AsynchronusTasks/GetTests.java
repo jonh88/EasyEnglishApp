@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import java.util.List;
  */
 public class GetTests extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "GetTests";
     private String token;
     private int idUser;
     private List<Test> tests;
@@ -73,7 +75,7 @@ public class GetTests extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(GetTests.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();

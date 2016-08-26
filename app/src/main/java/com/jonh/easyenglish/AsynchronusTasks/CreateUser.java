@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import java.net.URL;
  */
 public class CreateUser extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "CreateUser";
     private Usuario user;
     private Activity act;
 
@@ -53,8 +55,8 @@ public class CreateUser extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return 502;
+            Log.e(CreateUser.TAG, e.getMessage());
+            return -1;
         }finally {
             urlConnection.disconnect();
         }

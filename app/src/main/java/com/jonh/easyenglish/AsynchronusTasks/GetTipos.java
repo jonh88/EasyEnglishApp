@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
 
+    private static final String TAG = "GetTipos";
     Spinner spin;
     ArrayAdapter<String> adapter;
     int idUser;
@@ -71,14 +73,14 @@ public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
             }else if (code == 406){
                 //token expirado volver a loginActivity
                 Intent i = new Intent(actividad, LoginActivity.class);
-                startActivity(i);
+                actividad.startActivity(i);
             }else{
                 return null;
             }
 
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(GetTipos.TAG, e.getMessage());
             return null;
         }finally {
             urlConnection.disconnect();

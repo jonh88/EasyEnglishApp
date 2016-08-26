@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import java.net.URL;
  */
 public class UpdateTest extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "UpdateTest";
     private String token;
     private int idUser, idTest, numFallos, numPreguntas;
     private Activity actividad;
@@ -71,7 +73,7 @@ public class UpdateTest extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(UpdateTest.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();

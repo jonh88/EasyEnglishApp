@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ import java.net.URL;
  */
 public class UpdateCuestionario extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "UpdateCuestionario";
     private String token;
     private int idUser, idCuest, numFallos, numPreguntas;
     private Activity actividad;
@@ -70,7 +72,7 @@ public class UpdateCuestionario extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(UpdateCuestionario.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();

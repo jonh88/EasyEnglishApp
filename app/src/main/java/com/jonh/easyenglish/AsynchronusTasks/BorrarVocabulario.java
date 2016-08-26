@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -20,11 +21,12 @@ import java.net.URL;
  */
 public class BorrarVocabulario extends AsyncTask<Void, Void, Integer> {
 
-
+    private static final String TAG = "BorrarVocabulario";
     private int idUser, idVoc, pos;
     private String token;
     Context actividad;
     ListView listView;
+
 
     public BorrarVocabulario (String t, int id, int idVoc, ListView lv, int pos, Context act){
         this.idUser = id;
@@ -48,7 +50,7 @@ public class BorrarVocabulario extends AsyncTask<Void, Void, Integer> {
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(BorrarVocabulario.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();

@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 public class GetCuestionarioPreguntas extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "GetCuestionarioPregunta";
     private String token;
     private int idCues, idUser;
     private List<Pregunta> preg;
@@ -69,7 +71,7 @@ public class GetCuestionarioPreguntas extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(GetCuestionarioPreguntas.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();

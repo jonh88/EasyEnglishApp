@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -24,6 +25,7 @@ import java.net.URL;
  */
 public class GetMp3 extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "GetMP3";
     private String token;
     private int idUser;
     private String name;
@@ -67,7 +69,7 @@ public class GetMp3 extends AsyncTask<Void, Void, Integer> {
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(GetMp3.TAG, e.getMessage());
             return null;
         }finally {
             urlConnection.disconnect();

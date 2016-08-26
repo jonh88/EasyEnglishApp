@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import java.net.URL;
  */
 public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "InsertarVoc";
     Vocabulario voc;
     private int idUser;
     private String token;
@@ -61,7 +63,7 @@ public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(InsertarVoc.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();

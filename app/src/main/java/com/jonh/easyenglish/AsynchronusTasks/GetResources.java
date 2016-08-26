@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
  */
 public class GetResources extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "GetResources";
     private String token;
     private int idUser;
     private ArrayList<String> resources;
@@ -65,7 +67,7 @@ public class GetResources extends AsyncTask<Void, Void, Integer> {
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(GetResources.TAG, e.getMessage());
             return null;
         }finally {
             urlConnection.disconnect();

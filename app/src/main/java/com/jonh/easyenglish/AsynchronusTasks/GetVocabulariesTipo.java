@@ -3,6 +3,7 @@ package com.jonh.easyenglish.AsynchronusTasks;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import java.util.List;
  */
 public class GetVocabulariesTipo extends AsyncTask<Void, Void, Integer> {
 
+    private static final String TAG = "GetVocTipos";
     String token;
     int idUser;
     int idTipo;
@@ -64,25 +66,23 @@ public class GetVocabulariesTipo extends AsyncTask<Void, Void, Integer> {
 
             linea = response.toString();
 
-            Gson gson = new Gson();
-            TypeToken<List<Vocabulario>> token = new TypeToken<List<Vocabulario>>(){};
-            List<Vocabulario> t = gson.fromJson(linea,token.getType());
-            ArrayList<Vocabulario> res = new ArrayList<Vocabulario>();
-
-            if (t != null){
+            if (urlConnection.getResponseCode() == 200){
+                //si es 200 leo los resultados devueltos en json
+                Gson gson = new Gson();
+                TypeToken<List<Vocabulario>> token = new TypeToken<List<Vocabulario>>(){};
+                List<Vocabulario> t = gson.fromJson(linea,token.getType());
+                ArrayList<Vocabulario> res = new ArrayList<Vocabulario>();
                 //devuelvo solo los voc que tengan el tipo requerido
                 for (Vocabulario voc : t){
                     if (voc.getTipo().getId() == this.idTipo)
                         res.add(voc);
                 }
+                this.lVocs = res;
             }
 
-            this.lVocs = res;
-
             return urlConnection.getResponseCode();
-
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(GetVocabulariesTipo.TAG, e.getMessage());
             return -1;
         }finally {
             urlConnection.disconnect();
