@@ -41,8 +41,6 @@ public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected  Integer doInBackground(Void... params) {
-        // TODO: attempt authentication against a network service.
-
         URL url;
         HttpURLConnection urlConnection = null;
 
@@ -62,7 +60,6 @@ public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
             out.close();
 
             return urlConnection.getResponseCode();
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

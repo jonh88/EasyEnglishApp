@@ -42,7 +42,6 @@ public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
 
     @Override
     protected  List<Tipo> doInBackground(Void... params) {
-        // TODO: attempt authentication against a network service.
 
         URL url;
         HttpURLConnection urlConnection = null;
@@ -71,8 +70,8 @@ public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
                 return t;
             }else if (code == 406){
                 //token expirado volver a loginActivity
-                //Intent i = new Intent(actividad, LoginActivity.class);
-                //startActivity(i);
+                Intent i = new Intent(actividad, LoginActivity.class);
+                startActivity(i);
             }else{
                 return null;
             }

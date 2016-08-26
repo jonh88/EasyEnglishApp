@@ -41,8 +41,6 @@ public class GetResources extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected  Integer doInBackground(Void... params) {
-        // TODO: attempt authentication against a network service.
-
         URL url;
         HttpURLConnection urlConnection = null;
 

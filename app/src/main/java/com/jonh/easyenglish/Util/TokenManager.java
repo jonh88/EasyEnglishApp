@@ -34,11 +34,9 @@ public class TokenManager {
 
             return idUser;
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return -1;
         } catch (JOSEException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return -1;
         }

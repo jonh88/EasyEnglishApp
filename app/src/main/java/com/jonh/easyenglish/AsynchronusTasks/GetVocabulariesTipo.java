@@ -44,8 +44,6 @@ public class GetVocabulariesTipo extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected  Integer doInBackground(Void... params) {
-        // TODO: attempt authentication against a network service.
-
         URL url;
         HttpURLConnection urlConnection = null;
 
@@ -65,6 +63,7 @@ public class GetVocabulariesTipo extends AsyncTask<Void, Void, Integer> {
             }
 
             linea = response.toString();
+
             Gson gson = new Gson();
             TypeToken<List<Vocabulario>> token = new TypeToken<List<Vocabulario>>(){};
             List<Vocabulario> t = gson.fromJson(linea,token.getType());
