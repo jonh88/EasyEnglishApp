@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jonh.easyenglish">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Tests.TestsActivity"
+            android:label="@string/title_activity_tests"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Tests.TestConfig"
+            android:label="@string/title_activity_test_config"
+            android:parentActivityName=".Tests.TestsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Tests.TestsActivity" />
+        </activity>
+        <activity
+            android:name=".Tests.TestExam"
+            android:label="@string/title_activity_test_exam"
+            android:parentActivityName=".Tests.TestConfig"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Tests.TestConfig" />
+        </activity>
+        <activity
+            android:name=".Tests.PerformedTest"
+            android:label="@string/title_activity_performed_test"
+            android:parentActivityName=".Tests.TestsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Tests.TestsActivity" />
+        </activity>
+        <activity
+            android:name=".Vocab.Vocabulary"
+            android:label="@string/title_activity_vocabulary"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Vocab.Insert_Vocab"
+            android:label="@string/title_activity_insert__vocab"
+            android:parentActivityName=".Vocab.Vocabulary"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Vocab.Vocabulary" />
+        </activity>
+        <activity
+            android:name=".Vocab.Show_vocab"
+            android:label="@string/title_activity_show_vocab"
+            android:parentActivityName=".Vocab.Vocabulary"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Vocab.Vocabulary" />
+        </activity>
+        <activity
+            android:name=".Audio.Audios"
+            android:label="@string/title_activity_audios"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Audio.Resources_mp3"
+            android:label="@string/title_activity_resources_mp3"
+            android:parentActivityName=".Audio.Audios"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Audio.Audios" />
+        </activity>
+        <activity
+            android:name=".Audio.Player"
+            android:label="@string/title_activity_player"
+            android:parentActivityName=".Audio.Resources_mp3"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Audio.Resources_mp3" />
+        </activity>
+        <activity
+            android:name=".Audio.Resources_Local"
+            android:label="@string/title_activity_resources__local"
+            android:parentActivityName=".Audio.Audios"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Audio.Audios" />
+        </activity>
+        <activity
+            android:name=".Config"
+            android:label="@string/title_activity_config"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".Register"
+            android:label="@string/title_activity_register"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".Cuestionario.Cuestionario"
+            android:label="@string/title_activity_cuestionario"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Cuestionario.CuestionarioConfig"
+            android:label="@string/title_activity_cuestionario_config"
+            android:parentActivityName=".Cuestionario.Cuestionario"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.Cuestionario.Cuestionario" />
+        </activity>
+        <activity
+            android:name=".Cuestionario.CuestionarioExam"
+            android:label="@string/title_activity_cuestionario_exam"
+            android:parentActivityName=".Cuestionario.Cuestionario"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.Cuestionario.Cuestionario" />
+        </activity>
+        <activity
+            android:name=".Cuestionario.PerformedCuestionario"
+            android:label="@string/title_activity_performed_cuestionario"
+            android:parentActivityName=".Cuestionario.Cuestionario"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jonh.easyenglish.Cuestionario.Cuestionario" />
+        </activity>
+        <activity android:name=".GrammarView"></activity>
+    </application>
+
+</manifest>

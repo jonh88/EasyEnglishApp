@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PRUEBA WEBVIEW</title>
+    <style media="screen">
+    body{
+      background-color: #A9D0F5;
+    }
+      .cabecera {
+        display: block;
+        border: 3px solid black;
+        text-align: center;
+      }
+      .contenido{
+        border: 3px solid black;
+        padding: 10px;
+        margin-bottom: 5px;
+      }
+      input{
+        background-color: #A9D0F5;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+      <div class="cabecera">
+          <h2>GRAMMAR LESSONS</h2>
+      </div>
+
+    <div class="listaContenidos">
+      <ul>
+        <li>Modals   <input type="button" id="btnModals" value="+" onclick="showHide('contenidoModals', 'btnModals')"></li>
+        <li>Present Perfect   <input type="button" id="btnPresentPerfect" value="+" onclick="showHide('contenidoPresentPerfect', 'btnPresentPerfect')"></li>
+      </ul>
+    </div>
+    <div class="contenido" id="contenidoModals" style="display: none;">
+      <article class="">
+        <header>
+          <h3>MODALS</h3>
+          <p>
+            Los verbos modales acompañan siempre a otro verbo, y se usan para
+            expresar condicionales, futuros u otras connotaciones verbales.
+          </p>
+        </header>
+        <article class="">
+          <header>
+            <h5>CAN</h5>
+            <p>
+              Se usa para indicar posibilidad o habilidad. Tambien se usa para pedir permiso en frases interrogativas.
+            </p>
+          </header>
+          <ul>
+            <li>I can speak french</li>
+            <li>You can't work now</li>
+            <li>Can you help me?</li>
+          </ul>
+        </article>
+        <article class="">
+          <header>
+            <h5>MAY</h5>
+            <p>
+              Se usa para indicar posibilidades en el futuro, así como para dar permisos, y en frases interrogativas para pedir permisos, de un
+              modo mas educado que con can.
+            </p>
+          </header>
+          <ul>
+            <li>I may rain later</li>
+            <li>May I have a cup of coffe, please?</li>
+            <li>You may write here if you like</li>
+          </ul>
+        </article>
+      </article>
+    </div>
+
+    <div class="contenido" id="contenidoPresentPerfect" style="display: none;">
+      <article class="">
+        <header>
+          <h3>PRESENT PERFECT</h3>
+          <p>
+            Se forma del siguiente modo: Sujeto + have/has + verbo en participio. El participio se forma, por regla general, añadiendo -ed al verbo.
+          </p>
+        </header>
+        <ul>
+          <li>I have cleaned my bedroom</li>
+          <li>He has started the work</li>
+          <li>She has painted the wall</li>
+        </ul>
+        <article class="">
+          <header>
+            <h5>Negative form</h5>
+            <p>
+              La forma negativa se construye poniendo el verbo to have en forma negativa.
+            </p>
+          </header>
+          <ul>
+            <li>I have not cleaned my bedroom</li>
+            <li>He hasn't started the work</li>
+            <li>She has not painted the wall</li>
+          </ul>
+        </article>
+        <article class="">
+          <header>
+            <h5>Interrogative form</h5>
+            <p>
+              La forma interrogativa se construye así: Have/has + sujeto + verbo en participio + ... + ?
+            </p>
+          </header>
+          <ul>
+            <li>Have you cleaned my bedroom?</li>
+            <li>Has he started the work?</li>
+            <li>Has she painted the wall?</li>
+          </ul>
+        </article>
+      </article>
+    </div>
+
+  </body>
+  <script type="text/javascript">
+    function showHide(idDiv, idButton) {
+      var div = document.getElementById(idDiv);
+      var button = document.getElementById(idButton);
+
+      if(button.value === '+'){
+          button.value = '-';
+      }else {
+        button.value = '+'
+      }
+
+      if (div.style.display === 'none'){
+          div.style.display = 'block';
+      }else{
+        div.style.display = 'none';
+      }
+
+
+    }
+  </script>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:padding="5dp">
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+        android:text="English"
+        android:id="@+id/lbl_english"
+        android:paddingRight="20dp"/>
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_english"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_toRightOf="@+id/lbl_english"
+        android:layout_alignBaseline="@+id/lbl_english"
+        android:inputType="none"
+        android:textStyle="italic"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+        android:text="Spanish"
+        android:id="@+id/lbl_spanish"
+        android:layout_below="@+id/lbl_english"
+        android:paddingRight="14dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_spanish"
+        android:layout_below="@+id/txt_english"
+        android:layout_toRightOf="@+id/lbl_spanish"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignBaseline="@+id/lbl_spanish"
+        android:inputType="none"
+        android:textStyle="italic"/>
+
+</RelativeLayout>

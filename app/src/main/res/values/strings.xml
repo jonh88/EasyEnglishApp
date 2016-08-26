@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">EasyEnglish</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña (optional)</string>
+    <string name="action_register">Registrarse</string>
+    <string name="action_sign_in">Entrar</string>
+    <string name="error_invalid_email">Dirección de email incorrecta</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_field_required">Campo obligatorio</string>
+    <string name="insertar_vocab">Insertar</string>
+    <string name="show">Mostrar</string>
+    <string name="title_activity_main">Principal</string>
+    <string name="title_activity_tests">Tests</string>
+    <string name="title_activity_test_config">Nuevo Test</string>
+    <string name="title_activity_test_exam">Test Examen</string>
+    <string name="title_activity_performed_test">Test Realizados</string>
+    <string name="title_activity_vocabulary">Vocabulario</string>
+    <string name="title_activity_insert__vocab">Nuevo Vocabulario</string>
+    <string name="title_activity_show_vocab">Vocabularios</string>
+    <string name="title_activity_audios">Audios</string>
+    <string name="title_activity_resources_mp3">Recursos disponibles</string>
+    <string name="title_activity_player">Player</string>
+    <string name="title_activity_resources__local">Recursos locales</string>
+    <string name="title_activity_config">Config</string>
+    <string name="title_activity_register">Registro</string>
+    <string name="button_settings">Configuracion</string>
+    <string name="title_activity_cuestionario">Cuestionario</string>
+    <string name="action_settings">Configuracion</string>
+    <string name="title_activity_cuestionario_config">Nuevo Cuestionario</string>
+    <string name="title_activity_cuestionario_exam">Cuestionario Examen</string>
+    <string name="title_activity_performed_cuestionario">Cuestionarios Realizados</string>
+    <string name="name">Nombre</string>
+    <string name="lastName">Apellidos</string>
+    <string name="pass">Contraseña</string>
+    <string name="passRepeat">Contraseña (Repetir)</string>
+    <string name="download">Descarga</string>
+    <string name="player_text">Reproductor Audio</string>
+    <string name="start">Inicio</string>
+    <string name="end">Final</string>
+    <string name="save">Guardar</string>
+    <string name="english">Inglés</string>
+    <string name="spanish">Español</string>
+    <string name="new_">Nuevo</string>
+    <string name="performed">Realizados</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="chkRemember">Recordar credenciales</string>
+    <!-- botones mainActivity-->
+    <string name="Grammar">Gramática</string>
+    <string name="Test">Test</string>
+    <string name="Vocabulario">Vocabulario</string>
+    <string name="Cuestionario">Cuestionario</string>
+    <string name="Audio">Audio</string>
+    <string name="next">Siguiente</string>
+
+
+</resources>
