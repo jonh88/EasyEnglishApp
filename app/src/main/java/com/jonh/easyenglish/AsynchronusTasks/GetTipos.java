@@ -1,6 +1,9 @@
 package com.jonh.easyenglish.AsynchronusTasks;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -71,9 +74,22 @@ public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
 
                 return t;
             }else if (urlConnection.getResponseCode() == 406){
-                //token expirado volver a loginActivity
-                Intent i = new Intent(actividad, LoginActivity.class);
-                actividad.startActivity(i);
+                //token expirado reiniciar app
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
+                dialogBuilder.setTitle("Token expirado");
+                dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
+                dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(actividad, LoginActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        actividad.startActivity(i);
+                        ((Activity)actividad).finish();
+                        Runtime.getRuntime().exit(0);
+                    }
+                });
+                AlertDialog exitAppDialog = dialogBuilder.create();
+                exitAppDialog.show();
                 this.cancel(true);
             }else{
                 return null;

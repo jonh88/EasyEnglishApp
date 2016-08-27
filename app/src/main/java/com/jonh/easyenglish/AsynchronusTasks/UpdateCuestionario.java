@@ -1,6 +1,8 @@
 package com.jonh.easyenglish.AsynchronusTasks;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -93,11 +95,21 @@ public class UpdateCuestionario extends AsyncTask<Void, Void, Integer> {
             actividad.startActivity(i);
             actividad.finish();
         }else if (result == 406){
-            Toast t = Toast.makeText(actividad,"Se ha caducado el token...", Toast.LENGTH_LONG);
-            t.show();
-            Intent i = new Intent(actividad, LoginActivity.class);
-            actividad.startActivity(i);
-            actividad.finish();
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
+            dialogBuilder.setTitle("Token expirado");
+            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(actividad, LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    actividad.startActivity(i);
+                    actividad.finish();
+                    Runtime.getRuntime().exit(0);
+                }
+            });
+            AlertDialog exitAppDialog = dialogBuilder.create();
+            exitAppDialog.show();
         }else if (result == 200){
             Intent i = new Intent(actividad, com.jonh.easyenglish.Cuestionario.Cuestionario.class);
             i.putExtra("token", (Serializable) this.token);

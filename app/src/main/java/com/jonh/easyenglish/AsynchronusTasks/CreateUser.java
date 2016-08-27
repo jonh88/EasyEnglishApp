@@ -1,6 +1,8 @@
 package com.jonh.easyenglish.AsynchronusTasks;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -75,11 +77,21 @@ public class CreateUser extends AsyncTask<Void, Void, Integer> {
             //ya existe un usuario con ese mail
             Toast.makeText(this.act,"Ya existe un usuario con el mismo e-mail.",Toast.LENGTH_LONG).show();
         }else if (result == 406){
-            Toast t = Toast.makeText(act,"Se ha caducado el token...", Toast.LENGTH_LONG);
-            t.show();
-            Intent i = new Intent(act, LoginActivity.class);
-            act.startActivity(i);
-            act.finish();
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(act);
+            dialogBuilder.setTitle("Token expirado");
+            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(act, LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    act.startActivity(i);
+                    act.finish();
+                    Runtime.getRuntime().exit(0);
+                }
+            });
+            AlertDialog exitAppDialog = dialogBuilder.create();
+            exitAppDialog.show();
         }else {
             //error en SErver
             Toast.makeText(this.act,"Error creando el usuario... :( Codigo: "+result,Toast.LENGTH_LONG).show();

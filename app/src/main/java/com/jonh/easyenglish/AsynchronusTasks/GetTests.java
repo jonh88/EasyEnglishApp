@@ -1,7 +1,9 @@
 package com.jonh.easyenglish.AsynchronusTasks;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -100,10 +102,21 @@ public class GetTests extends AsyncTask<Void, Void, Integer> {
             Toast t = Toast.makeText(actividad,"No se ha realizado ningún test todavía", Toast.LENGTH_LONG);
             t.show();
         } else if (resp == 406) {
-            Toast t = Toast.makeText(actividad,"Se ha caducado el token...", Toast.LENGTH_LONG);
-            t.show();
-            Intent i = new Intent(actividad, LoginActivity.class);
-            actividad.startActivity(i);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
+            dialogBuilder.setTitle("Token expirado");
+            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(actividad, LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    actividad.startActivity(i);
+                    actividad.finish();
+                    Runtime.getRuntime().exit(0);
+                }
+            });
+            AlertDialog exitAppDialog = dialogBuilder.create();
+            exitAppDialog.show();
         }else {
             Toast t = Toast.makeText(actividad, "Ha habido un error al obtener los tests realizados... :( Codigo: " + resp, Toast.LENGTH_LONG);
             t.show();
