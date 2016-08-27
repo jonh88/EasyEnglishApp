@@ -72,7 +72,7 @@ public class UpdateCuestionario extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            Log.e(UpdateCuestionario.TAG, e.getMessage());
+            Log.e(UpdateCuestionario.TAG, e.getMessage(), e);
             return -1;
         }finally {
             urlConnection.disconnect();

@@ -55,7 +55,7 @@ public class CreateUser extends AsyncTask<Void, Void, Integer> {
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            Log.e(CreateUser.TAG, e.getMessage());
+            Log.e(CreateUser.TAG, e.getMessage(), e);
             return -1;
         }finally {
             urlConnection.disconnect();

@@ -50,7 +50,7 @@ public class BorrarVocabulario extends AsyncTask<Void, Void, Integer> {
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            Log.e(BorrarVocabulario.TAG, e.getMessage());
+            Log.e(BorrarVocabulario.TAG, e.getMessage(),e);
             return -1;
         }finally {
             urlConnection.disconnect();

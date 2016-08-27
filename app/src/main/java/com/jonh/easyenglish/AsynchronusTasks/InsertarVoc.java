@@ -63,7 +63,7 @@ public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            Log.e(InsertarVoc.TAG, e.getMessage());
+            Log.e(InsertarVoc.TAG, e.getMessage(), e);
             return -1;
         }finally {
             urlConnection.disconnect();

@@ -46,25 +46,26 @@ public class CreateCuestionario extends AsyncTask<Void, Void, Integer> {
             urlConnection.setRequestProperty("token", this.token);
             urlConnection.setRequestMethod("POST");
 
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            if (urlConnection.getResponseCode() == 200){
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-            InputStreamReader reader = new InputStreamReader(in);
-            BufferedReader br = new BufferedReader(reader);
-            String linea = null;
-            StringBuilder response = new StringBuilder();
-            while ((linea = br.readLine())!= null){
-                response.append(linea);
+                InputStreamReader reader = new InputStreamReader(in);
+                BufferedReader br = new BufferedReader(reader);
+                String linea = null;
+                StringBuilder response = new StringBuilder();
+                while ((linea = br.readLine())!= null){
+                    response.append(linea);
+                }
+
+                linea = response.toString();
+                Gson gson = new Gson();
+                Cuestionario c = gson.fromJson(linea,Cuestionario.class);
+                this.idCuest = c.getId();
             }
 
-            linea = response.toString();
-            Gson gson = new Gson();
-            Cuestionario c = gson.fromJson(linea,Cuestionario.class);
-            this.idCuest = c.getId();
-
             return urlConnection.getResponseCode();
-
         } catch (Exception e) {
-            Log.e(CreateCuestionario.TAG, e.getMessage());
+            Log.e(CreateCuestionario.TAG, e.getMessage(), e);
             return -1;
         }finally {
             urlConnection.disconnect();

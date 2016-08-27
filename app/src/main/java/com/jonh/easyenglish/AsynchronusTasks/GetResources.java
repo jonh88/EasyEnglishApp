@@ -50,24 +50,26 @@ public class GetResources extends AsyncTask<Void, Void, Integer> {
             url = new URL (Connection.getHost()+"media/resources?id="+this.idUser);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("token", this.token);
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            if (urlConnection.getResponseCode()==200){
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-            InputStreamReader reader = new InputStreamReader(in);
-            BufferedReader br = new BufferedReader(reader);
-            String linea = null;
-            StringBuilder response = new StringBuilder();
-            while ((linea = br.readLine())!= null){
-                response.append(linea);
+                InputStreamReader reader = new InputStreamReader(in);
+                BufferedReader br = new BufferedReader(reader);
+                String linea = null;
+                StringBuilder response = new StringBuilder();
+                while ((linea = br.readLine())!= null){
+                    response.append(linea);
+                }
+
+                linea = response.toString();
+                Gson gson = new Gson();
+                TypeToken<ArrayList<String>> token = new TypeToken<ArrayList<String>>(){};
+                resources = gson.fromJson(linea,token.getType());
             }
-
-            linea = response.toString();
-            Gson gson = new Gson();
-            TypeToken<ArrayList<String>> token = new TypeToken<ArrayList<String>>(){};
-            resources = gson.fromJson(linea,token.getType());
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            Log.e(GetResources.TAG, e.getMessage());
+            Log.e(GetResources.TAG, e.getMessage(),e);
             return null;
         }finally {
             urlConnection.disconnect();

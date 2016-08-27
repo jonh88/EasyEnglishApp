@@ -53,25 +53,27 @@ public class GetCuestionarioPreguntas extends AsyncTask<Void, Void, Integer> {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("token", this.token);
 
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            if (urlConnection.getResponseCode() == 200){
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-            InputStreamReader reader = new InputStreamReader(in);
-            BufferedReader br = new BufferedReader(reader);
-            String linea = null;
-            StringBuilder response = new StringBuilder();
-            while ((linea = br.readLine())!= null){
-                response.append(linea);
+                InputStreamReader reader = new InputStreamReader(in);
+                BufferedReader br = new BufferedReader(reader);
+                String linea = null;
+                StringBuilder response = new StringBuilder();
+                while ((linea = br.readLine())!= null){
+                    response.append(linea);
+                }
+
+                linea = response.toString();
+                Gson gson = new Gson();
+                TypeToken<List<Pregunta>> token = new TypeToken<List<Pregunta>>(){};
+                this.preg = gson.fromJson(linea,token.getType());
             }
-
-            linea = response.toString();
-            Gson gson = new Gson();
-            TypeToken<List<Pregunta>> token = new TypeToken<List<Pregunta>>(){};
-            this.preg = gson.fromJson(linea,token.getType());
 
             return urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            Log.e(GetCuestionarioPreguntas.TAG, e.getMessage());
+            Log.e(GetCuestionarioPreguntas.TAG, e.getMessage(), e);
             return -1;
         }finally {
             urlConnection.disconnect();

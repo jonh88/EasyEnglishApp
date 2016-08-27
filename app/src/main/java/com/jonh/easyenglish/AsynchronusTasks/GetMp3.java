@@ -57,19 +57,21 @@ public class GetMp3 extends AsyncTask<Void, Void, Integer> {
             BufferedInputStream bis = new BufferedInputStream(is);
             totalSize = urlConnection.getContentLength();
 
-            FileOutputStream fos = this.actividad.openFileOutput(this.name, Context.MODE_PRIVATE);
+            if (urlConnection.getResponseCode() == 200){
+                FileOutputStream fos = this.actividad.openFileOutput(this.name, Context.MODE_PRIVATE);
 
-            byte [] buffer = new byte[totalSize];
-            int byteRead = -1;
-            while ((byteRead = is.read(buffer)) != -1){
-                fos.write(buffer,0,byteRead);
+                byte [] buffer = new byte[totalSize];
+                int byteRead = -1;
+                while ((byteRead = is.read(buffer)) != -1){
+                    fos.write(buffer,0,byteRead);
+                }
+
+                fos.close();
             }
-
-            fos.close();
 
             return urlConnection.getResponseCode();
         } catch (Exception e) {
-            Log.e(GetMp3.TAG, e.getMessage());
+            Log.e(GetMp3.TAG, e.getMessage(), e);
             return null;
         }finally {
             urlConnection.disconnect();

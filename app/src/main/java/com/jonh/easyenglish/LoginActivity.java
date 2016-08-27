@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        //config
+        /*config
         Button bSettings = (Button) findViewById(R.id.config_button);
         bSettings.setOnClickListener(new OnClickListener() {
             @Override
@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+        */
 
         chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

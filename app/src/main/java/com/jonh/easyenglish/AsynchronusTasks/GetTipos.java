@@ -52,8 +52,8 @@ public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
             url = new URL (Connection.getHost()+"tipoVoc?id="+this.idUser);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("token", this.token);
-            int code = urlConnection.getResponseCode();
-            if (code == 200){
+
+            if (urlConnection.getResponseCode() == 200){
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
                 InputStreamReader reader = new InputStreamReader(in);
@@ -70,17 +70,18 @@ public class GetTipos extends AsyncTask<Void, Void, List<Tipo>> {
                 List<Tipo> t = gson.fromJson(linea,token.getType());
 
                 return t;
-            }else if (code == 406){
+            }else if (urlConnection.getResponseCode() == 406){
                 //token expirado volver a loginActivity
                 Intent i = new Intent(actividad, LoginActivity.class);
                 actividad.startActivity(i);
+                this.cancel(true);
             }else{
                 return null;
             }
 
             return null;
         } catch (Exception e) {
-            Log.e(GetTipos.TAG, e.getMessage());
+            Log.e(GetTipos.TAG, e.getMessage(), e);
             return null;
         }finally {
             urlConnection.disconnect();
