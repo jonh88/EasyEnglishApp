@@ -43,7 +43,7 @@ public class Show_vocab extends AppCompatActivity {
         vocs = (ListView)findViewById(R.id.lvVocabularies);
 
         //LLENAR SPIN
-        GetTipos fill = new GetTipos(spin, adapterSpin,Show_vocab.idUser,Show_vocab.token, Show_vocab.this);
+        GetTipos fill = new GetTipos(spin, Show_vocab.idUser,Show_vocab.token, Show_vocab.this);
         fill.execute();
 
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

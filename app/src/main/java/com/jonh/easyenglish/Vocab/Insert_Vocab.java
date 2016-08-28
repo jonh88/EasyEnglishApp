@@ -62,7 +62,7 @@ public class Insert_Vocab extends AppCompatActivity {
         btnSave = (Button) findViewById(R.id.btnSave);
 
         //LLENAR SPINNER
-        GetTipos llenarSpin = new GetTipos(spin, adapter,Insert_Vocab.idUser,Insert_Vocab.token, Insert_Vocab.this);
+        GetTipos llenarSpin = new GetTipos(spin, Insert_Vocab.idUser,Insert_Vocab.token, Insert_Vocab.this);
         llenarSpin.execute();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
