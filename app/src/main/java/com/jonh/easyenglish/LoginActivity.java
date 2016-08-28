@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jonh.easyenglish.AsynchronusTasks.Login;
 import com.jonh.easyenglish.Util.Connection;
 import com.jonh.easyenglish.Util.TokenManager;
 
@@ -36,28 +39,36 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private UserLoginTask mAuthTask = null;
+    private Login mAuthTask;
     // UI references.
     private CheckBox chkRemember;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Button mEmailSignInButton;
+    private Button bRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //ocultar teclado
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         // CONTROLES
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         chkRemember = (CheckBox)findViewById(R.id.checkBoxRemember);
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        bRegister = (Button) findViewById(R.id.email_register_button);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
 
+        //ocultar teclado
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        //cargar datos mail y contraseña
         getPreferenceData();
 
+        //METODOS CONTROLES
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener(){
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -80,15 +91,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+                if (activeNetwork != null && activeNetwork.isAvailable() && activeNetwork.isConnected()){
+                    attemptLogin();
+                }else {
+                    Toast.makeText(LoginActivity.this, "No dispones de conexión a internet... :(", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
-        Button bRegister = (Button) findViewById(R.id.email_register_button);
         bRegister.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,8 +115,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    rememeberData();
+                else
+                    notRemeberData();
+            }
+        });
 
         /*config
         Button bSettings = (Button) findViewById(R.id.config_button);
@@ -112,17 +136,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         */
-
-        chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    rememeberData();
-                else
-                    notRemeberData();
-            }
-        });
-
     }
 
     private void rememeberData(){
@@ -159,10 +172,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -205,9 +214,9 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            //showProgress(true);
+            mAuthTask = new Login(email, password, LoginActivity.this, this.mProgressView, this.mLoginFormView);
+            mAuthTask.execute((Void)null);
 
         }
     }
@@ -220,118 +229,4 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 3;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-            //fab.setVisibility(show ? View.GONE : View.VISIBLE);
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            //fab.setVisibility(show ? View.GONE : View.VISIBLE);
-
-        }
-    }
-
-    //<Tipo_empezarBackground, Tipo_duranteBackground, Tipo_terminarBackground>
-    public class UserLoginTask extends AsyncTask<Void, Void, String> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected String doInBackground(Void... paradoms) {
-            URL url;
-            HttpURLConnection urlConnection = null;
-
-            try {
-
-                url = new URL (Connection.getHost()+"authz?user="+this.mEmail+"&pass="+this.mPassword);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                int code = urlConnection.getResponseCode();
-
-                if (code == 200){
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    InputStreamReader reader = new InputStreamReader(in);
-                    BufferedReader br = new BufferedReader(reader);
-                    String linea = null;
-                    StringBuilder response = new StringBuilder();
-                    while ((linea = br.readLine())!= null){
-                        response.append(linea);
-                    }
-
-                    linea = response.toString();
-                    return linea;
-                }else{
-                    return "Forbidden";
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }finally {
-                urlConnection.disconnect();
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(final String token) {
-            mAuthTask = null;
-            showProgress(false);
-            if ((token != null)&&(!token.equals("Forbidden"))) {
-                //obtener id usuario del token
-                TokenManager tm = new TokenManager();
-                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                i.putExtra("token", (Serializable) token);
-                i.putExtra("idUser", (Serializable) tm.getUserFromToken(token));
-                startActivity(i);
-                finish();
-            } else if (token.equals("Forbidden")) {
-               Toast toast = Toast.makeText(getApplicationContext(),"User or password incorrect",Toast.LENGTH_LONG);
-               toast.show();
-            }else{
-                Toast toast = Toast.makeText(getApplicationContext(),"Error in server...",Toast.LENGTH_LONG);
-                toast.show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
