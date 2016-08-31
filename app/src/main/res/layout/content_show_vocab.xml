@@ -9,26 +9,38 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_show_vocab" tools:context=".Vocab.Show_vocab">
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spnVocabTypeShow"
-        android:layout_gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/layout_spinner"></Spinner>
+    <!-- Login progress -->
+    <ProgressBar android:id="@+id/pBarShowVocab" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvVocabularies"
-        android:layout_below="@+id/spnVocabTypeShow"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/layout_border"
-        android:fadeScrollbars="false"
-        android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-        android:scrollbarTrackVertical="@drawable/scrollball_vertical_track"/>
+    <LinearLayout
+        android:id="@+id/containerShowVocab"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spnVocabTypeShow"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/layout_spinner" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvVocabularies"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:background="@drawable/layout_border"
+            android:fadeScrollbars="false"
+            android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+            android:scrollbarTrackVertical="@drawable/scrollball_vertical_track"/>
+    </LinearLayout>
 
 </RelativeLayout>

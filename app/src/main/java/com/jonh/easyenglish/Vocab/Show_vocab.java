@@ -24,6 +24,8 @@ public class Show_vocab extends AppCompatActivity {
     private Spinner spin;
     private ArrayAdapter<String> adapterSpin;
     private ListView vocs;
+    private static View container;
+    private static View pBar;
     private Vocabulario selected;
 
     @Override
@@ -41,6 +43,8 @@ public class Show_vocab extends AppCompatActivity {
         //CONTROLES
         spin = (Spinner)findViewById(R.id.spnVocabTypeShow);
         vocs = (ListView)findViewById(R.id.lvVocabularies);
+        container = (View) findViewById(R.id.containerShowVocab);
+        pBar = (View) findViewById(R.id.pBarShowVocab);
 
         //LLENAR SPIN
         GetTipos fill = new GetTipos(spin, Show_vocab.idUser,Show_vocab.token, Show_vocab.this);
@@ -84,7 +88,7 @@ public class Show_vocab extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     //borrar voc
                         BorrarVocabulario delete = new BorrarVocabulario(Show_vocab.token, Show_vocab.idUser,
-                                selected.getId(), vocs, position, Show_vocab.this);
+                                Show_vocab.pBar, Show_vocab.container, selected.getId(), vocs, position, Show_vocab.this);
                         delete.execute();
 
                     }
