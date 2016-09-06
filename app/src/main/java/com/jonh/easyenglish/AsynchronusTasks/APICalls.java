@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 
+import com.jonh.easyenglish.LoginActivity;
+
 /**
  * Created by jonh on 31/08/16.
  */
@@ -31,14 +33,14 @@ public abstract class APICalls extends AsyncTask<Void, Void, Integer>{
     public View getProgress() { return this.pBar;}
     public View getContainer() { return this.container;}
 
-    public void tokenExpired (final Class<?>  act){
+    public void tokenExpired (){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
         dialogBuilder.setTitle("Sesión caducada");
         dialogBuilder.setMessage("Se ha caducado la sesión, debe volver a entrar al sistema.");
         AlertDialog.Builder builder = dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(actividad, act);
+                Intent i = new Intent(actividad, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 actividad.startActivity(i);
                 actividad.finish();

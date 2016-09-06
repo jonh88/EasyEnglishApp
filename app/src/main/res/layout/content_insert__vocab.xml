@@ -9,7 +9,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_insert__vocab" tools:context=".Vocab.Insert_Vocab">
 
+    <!-- Login progress -->
+    <ProgressBar android:id="@+id/insertVocProgress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
     <LinearLayout
+        android:id="@+id/insertVocContainer"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -22,34 +22,24 @@ import java.net.URL;
 /**
  * Created by jonh on 28/08/16.
  */
-public class Login extends AsyncTask<Void, Void, Integer> {
+public class Login extends APICalls {
 
     private static final String TAG = "Login";
     private final String mEmail;
     private final String mPassword;
-    private Activity actividad;
-    private String token;
-    private static View pBar;
-    private static View container;
 
-    public Login(String email, String password, Activity act, View progresBar, View container) {
+    private String token;
+
+
+    public Login(String email, String password, Activity act, View progress, View container) {
+        super(-1, "", act, progress, container);
         this.mEmail = email;
         this.mPassword = password;
-        this.actividad = act;
-        this.pBar = progresBar;
-        this.container = container;
     }
 
     @Override
     protected Integer doInBackground(Void... paradoms) {
-        //el metodo setVisibility de un view solo puede ser ejecutado por el hilo ppal
-        actividad.runOnUiThread(new Runnable(){
-            @Override
-            public void run() {
-                Login.pBar.setVisibility(View.VISIBLE);
-                Login.container.setVisibility(View.GONE);
-            }
-        });
+       super.showProgress(true);
 
         URL url;
         HttpURLConnection urlConnection = null;
@@ -82,32 +72,28 @@ public class Login extends AsyncTask<Void, Void, Integer> {
     @Override
     protected void onPostExecute(final Integer resp) {
         //mAuthTask = null;
-        //el metodo setVisibility de un view solo puede ser ejecutado por el hilo ppal
-        actividad.runOnUiThread(new Runnable(){
-            @Override
-            public void run() {
-                Login.pBar.setVisibility(View.GONE);
-                Login.container.setVisibility(View.VISIBLE);
-            }
-        });
+        super.showProgress(false);
         switch (resp){
             case 200:
                 //obtener id usuario del token
                 TokenManager tm = new TokenManager();
-                Intent i = new Intent(actividad, MainActivity.class);
+                Intent i = new Intent(super.getActivity(), MainActivity.class);
                 i.putExtra("token", (Serializable) token);
                 i.putExtra("idUser", (Serializable) tm.getUserFromToken(this.token));
-                actividad.startActivity(i);
-                actividad.finish();
+                super.getActivity().startActivity(i);
+                super.getActivity().finish();
                 break;
             case 403:
-                Toast.makeText(actividad,"Usuario y/o contraseña incorrectos",Toast.LENGTH_LONG).show();
+                Toast.makeText(super.getActivity(),"Usuario y/o contraseña incorrectos",Toast.LENGTH_LONG).show();
                 break;
             case 500:
-                Toast.makeText(actividad,"Error interno en el servidor...",Toast.LENGTH_LONG).show();
+                Toast.makeText(super.getActivity(),"Error interno en el servidor...",Toast.LENGTH_LONG).show();
+                break;
+            case 406:
+                super.tokenExpired();
                 break;
             default:
-                Toast.makeText(actividad,"Error en la aplicación ...",Toast.LENGTH_LONG).show();
+                Toast.makeText(super.getActivity(),"Error en la aplicación ...",Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -116,13 +102,7 @@ public class Login extends AsyncTask<Void, Void, Integer> {
     protected void onCancelled() {
         //mAuthTask = null;
         //el metodo setVisibility de un view solo puede ser ejecutado por el hilo ppal
-        actividad.runOnUiThread(new Runnable(){
-            @Override
-            public void run() {
-                Login.pBar.setVisibility(View.GONE);
-                Login.container.setVisibility(View.VISIBLE);
-            }
-        });
+        super.showProgress(false);
     }
 
 }

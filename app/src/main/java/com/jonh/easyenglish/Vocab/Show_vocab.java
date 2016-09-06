@@ -25,7 +25,7 @@ public class Show_vocab extends AppCompatActivity {
     private ArrayAdapter<String> adapterSpin;
     private ListView vocs;
     private static View container;
-    private static View pBar;
+    private static View pBar, pBarDos;
     private Vocabulario selected;
 
     @Override
@@ -43,27 +43,28 @@ public class Show_vocab extends AppCompatActivity {
         //CONTROLES
         spin = (Spinner)findViewById(R.id.spnVocabTypeShow);
         vocs = (ListView)findViewById(R.id.lvVocabularies);
-        container = (View) findViewById(R.id.containerShowVocab);
-        pBar = (View) findViewById(R.id.pBarShowVocab);
+        container = findViewById(R.id.containerShowVocab);
+        pBar = findViewById(R.id.pBarShowVocab);
+        pBarDos = findViewById(R.id.showVocabProgressDos);
 
         //LLENAR SPIN
-        GetTipos fill = new GetTipos(spin, Show_vocab.idUser,Show_vocab.token, Show_vocab.this);
+        GetTipos fill = new GetTipos(spin, Show_vocab.idUser,Show_vocab.token, Show_vocab.this, pBar, container);
         fill.execute();
 
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
-                    case 0: GetVocabulariesTipo tipoVerbo = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,1, vocs,Show_vocab.this);
+                    case 0: GetVocabulariesTipo tipoVerbo = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,1, vocs,Show_vocab.this, pBarDos, vocs);
                         tipoVerbo.execute();
                         break;
-                    case 1: GetVocabulariesTipo tipoAdjetivo = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,3,vocs,Show_vocab.this);
+                    case 1: GetVocabulariesTipo tipoAdjetivo = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,3,vocs,Show_vocab.this, pBarDos, vocs);
                         tipoAdjetivo.execute();
                         break;
-                    case 2: GetVocabulariesTipo tipoSustantivo = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,4,vocs,Show_vocab.this);
+                    case 2: GetVocabulariesTipo tipoSustantivo = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,4,vocs,Show_vocab.this, pBarDos, vocs);
                         tipoSustantivo.execute();
                         break;
-                    case 3: GetVocabulariesTipo tipoExpresion = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,5,vocs,Show_vocab.this);
+                    case 3: GetVocabulariesTipo tipoExpresion = new GetVocabulariesTipo(Show_vocab.idUser,Show_vocab.token,5,vocs,Show_vocab.this, pBarDos, vocs);
                         tipoExpresion.execute();
                         break;
                 }

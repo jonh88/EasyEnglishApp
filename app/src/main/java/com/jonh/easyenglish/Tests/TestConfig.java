@@ -54,7 +54,7 @@ public class TestConfig extends AppCompatActivity {
         //CONTROLES
         numQuestions = (EditText)findViewById(R.id.txtNumQuestion);
         linearLayout = (View) findViewById(R.id.LinearLayout);
-        barraProgreso = (View)findViewById(R.id.progress);
+        barraProgreso = (View)findViewById(R.id.testConfigProgress);
         create = (Button)findViewById(R.id.btnCreate);
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +66,7 @@ public class TestConfig extends AppCompatActivity {
                     t.show();
                 }else{
                     //CREAR TEST
-                    createTestTask = new CreateTest(TestConfig.token, Integer.valueOf(numQuestions.getText().toString()), TestConfig.idUser, TestConfig.this);
+                    createTestTask = new CreateTest(TestConfig.token, Integer.valueOf(numQuestions.getText().toString()), TestConfig.idUser, TestConfig.this, barraProgreso, linearLayout);
                     createTestTask.execute();
                     showProgress(true);
 //                    finish();

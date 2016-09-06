@@ -23,14 +23,9 @@ import java.net.URL;
 
 public class Register extends AppCompatActivity {
 
-    private EditText txtNombre;
-    private EditText txtApe;
-    private EditText txtEmail;
-    private EditText txtPass;
-    private EditText txtPass_;
-    private EditText emptyView;
-    private EditText samePass;
+    private EditText txtNombre, txtApe, txtEmail, txtPass, txtPass_;
     private Button btnReg;
+    private View progress, container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +41,8 @@ public class Register extends AppCompatActivity {
         txtEmail = (EditText)findViewById(R.id.txtEmailReg);
         txtPass = (EditText)findViewById(R.id.txtPassReg);
         txtPass_ = (EditText)findViewById(R.id.txtPassRepReg);
+        progress = findViewById(R.id.registerProgress);
+        container = findViewById(R.id.registerContainer);
 
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +53,7 @@ public class Register extends AppCompatActivity {
                     Usuario nUser = new Usuario(txtNombre.getText().toString(),txtApe.getText().toString(),
                             txtEmail.getText().toString(),txtPass.getText().toString());
                     //llamada REST
-                    CreateUser restUser = new CreateUser(nUser, Register.this);
+                    CreateUser restUser = new CreateUser(nUser, Register.this,progress,container);
                     restUser.execute();
                 }
 

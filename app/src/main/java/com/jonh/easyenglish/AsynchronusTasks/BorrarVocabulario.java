@@ -74,7 +74,7 @@ public class BorrarVocabulario extends APICalls {
             Toast t1 = Toast.makeText(super.getActivity(), "No se ha borrado el vocabulario...", Toast.LENGTH_SHORT);
             t1.show();
         }else if (res == 406){
-            super.tokenExpired(LoginActivity.class);
+            super.tokenExpired();
         }else {
             Toast t1 = Toast.makeText(super.getActivity(),"Error borrando vocabulario... :( Codigo: "+res,Toast.LENGTH_SHORT);
             t1.show();

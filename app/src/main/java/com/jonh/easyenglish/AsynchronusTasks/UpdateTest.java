@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -25,26 +26,22 @@ import java.net.URL;
 /**
  * Created by jonh on 17/08/16.
  */
-public class UpdateTest extends AsyncTask<Void, Void, Integer> {
+public class UpdateTest extends APICalls {
 
     private static final String TAG = "UpdateTest";
-    private String token;
-    private int idUser, idTest, numFallos, numPreguntas;
-    private Activity actividad;
+    private int idTest, numFallos, numPreguntas;
 
-
-    public UpdateTest (String t, int test, int user, int fallos, int preg, Activity act){
-        this.token = t;
+    public UpdateTest (String token, int test, int idUser, int fallos, int preg, Activity act, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.idTest = test;
-        this.idUser = user;
         this.numFallos = fallos;
         this.numPreguntas = preg;
-        this.actividad = act;
+
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
-
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
@@ -58,9 +55,9 @@ public class UpdateTest extends AsyncTask<Void, Void, Integer> {
 
             String jsonObject = new Gson().toJson(nTest);
 
-            url = new URL (Connection.getHost()+"test/"+this.idTest+"?id="+this.idUser);
+            url = new URL (Connection.getHost()+"test/"+this.idTest+"?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("PUT");
             urlConnection.setFixedLengthStreamingMode(jsonObject.getBytes().length); //gets system default chunk size
@@ -85,41 +82,26 @@ public class UpdateTest extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer result) {
-
+        super.showProgress(false);
         if ((result == -1)||(result == 500)){
-            Toast t = Toast.makeText(actividad,"Ha habido un error... :(", Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"Ha habido un error... :(", Toast.LENGTH_LONG);
             t.show();
 
-            Intent i = new Intent(actividad, TestsActivity.class);
-            i.putExtra("token", (Serializable) this.token);
-            i.putExtra("idUser", (Serializable) this.idUser);
-            actividad.startActivity(i);
-            actividad.finish();
+            Intent i = new Intent(super.getActivity(), TestsActivity.class);
+            i.putExtra("token", (Serializable) super.getToken());
+            i.putExtra("idUser", (Serializable) super.getIdUser());
+            super.getActivity().startActivity(i);
+            super.getActivity().finish();
         }else if (result == 406){
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    actividad.finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else if (result == 200){
-            Intent i = new Intent(actividad, TestsActivity.class);
-            i.putExtra("token", (Serializable) this.token);
-            i.putExtra("idUser", (Serializable) this.idUser);
-            actividad.startActivity(i);
-            actividad.finish();
+            Intent i = new Intent(super.getActivity(), TestsActivity.class);
+            i.putExtra("token", (Serializable) super.getToken());
+            i.putExtra("idUser", (Serializable) super.getIdUser());
+            super.getActivity().startActivity(i);
+            super.getActivity().finish();
         }else{
-            Toast t = Toast.makeText(actividad,"Error actualizando Test. Codigo: "+result, Toast.LENGTH_LONG);
-            t.show();
+            Toast.makeText(super.getActivity(),"Error actualizando Test. Codigo: "+result, Toast.LENGTH_LONG).show();
         }
 
     }

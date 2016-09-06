@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -28,32 +29,27 @@ import java.util.List;
 /**
  * Created by jonh on 16/08/16.
  */
-public class GetTipos extends AsyncTask<Void, Void, Integer> {
+public class GetTipos extends APICalls {
 
     private static final String TAG = "GetTipos";
     Spinner spin;
-    int idUser;
-    String token;
-    Activity actividad;
     private String [] tipos;
 
-    public GetTipos (Spinner spin, int idUser, String token, Activity act){
+    public GetTipos (Spinner spin, int idUser, String token, Activity act, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.spin = spin;
-        this.idUser = idUser;
-        this.token = token;
-        this.actividad = act;
     }
 
     @Override
     protected  Integer doInBackground(Void... params) {
-
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"tipoVoc?id="+this.idUser);
+            url = new URL (Connection.getHost()+"tipoVoc?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
 
             if (urlConnection.getResponseCode() == 200) {
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -89,35 +85,20 @@ public class GetTipos extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer resp) {
-
+        super.showProgress(false);
         switch (resp){
             case 200:
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.actividad,android.R.layout.simple_list_item_1, this.tipos);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(super.getActivity(),android.R.layout.simple_list_item_1, this.tipos);
                 this.spin.setAdapter(adapter);
                 break;
             case 406:
-                //token expirado reiniciar app
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-                dialogBuilder.setTitle("Token expirado");
-                dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-                dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(actividad, LoginActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        actividad.startActivity(i);
-                        actividad.finish();
-                        Runtime.getRuntime().exit(0);
-                    }
-                });
-                AlertDialog exitAppDialog = dialogBuilder.create();
-                exitAppDialog.show();
+                super.tokenExpired();
                 break;
             case 500:
-                Toast.makeText(this.actividad,"Error en el servidor... :(",Toast.LENGTH_SHORT).show();
+                Toast.makeText(super.getActivity(),"Error en el servidor... :(",Toast.LENGTH_SHORT).show();
                 break;
             default:
-                Toast.makeText(this.actividad,"Error en la aplicacion... :(",Toast.LENGTH_SHORT);
+                Toast.makeText(super.getActivity(),"Error en la aplicacion... :(",Toast.LENGTH_SHORT).show();
                 break;
         }
 

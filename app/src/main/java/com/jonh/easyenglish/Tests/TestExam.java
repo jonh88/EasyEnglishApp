@@ -45,10 +45,8 @@ public class TestExam extends AppCompatActivity {
     private ArrayList<String> respuestas;
     private Button next;
     private int contador;
-    private EditText txtIdioma;
-    private EditText txtTraducir;
-
-
+    private EditText txtIdioma, txtTraducir;
+    private View progress, container;
 
 
     @Override
@@ -61,6 +59,8 @@ public class TestExam extends AppCompatActivity {
         next = (Button) findViewById(R.id.btnNext);
         txtIdioma = (EditText)findViewById(R.id.txtIdioma);
         txtTraducir = (EditText)findViewById(R.id.txtTraducir);
+        progress = findViewById(R.id.progressTestExam);
+        container= findViewById(R.id.LinearLayout_textExam);
 
         setSupportActionBar(toolbar);
 
@@ -125,7 +125,7 @@ public class TestExam extends AppCompatActivity {
                 //update test
                 Toast t = Toast.makeText(act,"Guardando resultado...", Toast.LENGTH_SHORT);
                 t.show();
-                UpdateTest uTest = new UpdateTest(TestExam.token, TestExam.idTest, TestExam.idUser, TestExam.fallos, TestExam.testQ.size(), TestExam.this);
+                UpdateTest uTest = new UpdateTest(TestExam.token, TestExam.idTest, TestExam.idUser, TestExam.fallos, TestExam.testQ.size(), TestExam.this, progress, container);
                 uTest.execute();
                 //finish();
             }

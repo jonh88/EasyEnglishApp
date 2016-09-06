@@ -11,8 +11,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_test_config" tools:context=".Tests.TestConfig">
 
-    <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <ProgressBar android:id="@+id/testConfigProgress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent" android:layout_height="match_parent"
         android:layout_marginBottom="8dp" android:visibility="gone" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

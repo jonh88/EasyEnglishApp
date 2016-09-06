@@ -53,7 +53,9 @@ public class CuestionarioConfig extends AppCompatActivity {
                     t.show();
                 }else{
                     //CREAR TEST
-                    createCuestionarioTask = new CreateCuestionario(CuestionarioConfig.token, Integer.valueOf(numQuestions.getText().toString()), CuestionarioConfig.idUser, CuestionarioConfig.this);
+                    createCuestionarioTask = new CreateCuestionario(CuestionarioConfig.token,
+                            Integer.valueOf(numQuestions.getText().toString()), CuestionarioConfig.idUser,
+                            CuestionarioConfig.this, barraProgreso, linearLayout);
                     createCuestionarioTask.execute();
                     showProgress(true);
 //                    finish();

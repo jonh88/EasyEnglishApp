@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,31 +29,28 @@ import java.util.List;
 /**
  * Created by jonh on 17/08/16.
  */
-public class GetTestPreguntas extends AsyncTask<Void, Void, Integer> {
+public class GetTestPreguntas extends APICalls {
 
     private static final String TAG = "GetTestPreguntas";
-    private String token;
-    private int idTest, idUser;
+    private int idTest;
     private List<Vocabulario> preg;
-    private Context actividad;
 
-    public GetTestPreguntas (String t, int idTest, int idUser, Context act){
-        this.token = t;
+
+    public GetTestPreguntas (String token, int idTest, int idUser, Activity act, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.idTest = idTest;
-        this.idUser = idUser;
-        this.actividad = act;
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
-
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"test/"+this.idTest+"/questions?id="+this.idUser);
+            url = new URL (Connection.getHost()+"test/"+this.idTest+"/questions?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
 
             if (urlConnection.getResponseCode() ==200){
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -82,38 +80,23 @@ public class GetTestPreguntas extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute (final Integer resp){
-
+        super.showProgress(false);
         if (resp == 200){
             //llamar actividad testExamn
-            Intent i = new Intent(actividad, TestExam.class);
-            i.putExtra("token",(Serializable)token);
-            i.putExtra("idUser",(Serializable)idUser);
+            Intent i = new Intent(super.getActivity(), TestExam.class);
+            i.putExtra("token",(Serializable)super.getToken());
+            i.putExtra("idUser",(Serializable)super.getIdUser());
             i.putExtra("idTest",(Serializable)idTest);
             i.putExtra("preguntas",(Serializable)this.preg);
-            actividad.startActivity(i);
-
+            super.getActivity().startActivity(i);
         }else if (resp == 404){
-            Toast t = Toast.makeText(actividad,"No existen preguntas para este test... :(", Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"No existen preguntas para este test... :(", Toast.LENGTH_LONG);
             t.show();
 
         } else if (resp == 406) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    ((Activity)actividad).finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else {
-            Toast t = Toast.makeText(actividad,"Ha habido un error al obtener las preguntas del test... :( Codigo: "+resp, Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"Ha habido un error al obtener las preguntas del test... :( Codigo: "+resp, Toast.LENGTH_LONG);
             t.show();
         }
     }

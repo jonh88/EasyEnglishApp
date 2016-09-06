@@ -25,42 +25,35 @@ import java.net.URL;
 /**
  * Created by jonh on 18/08/16.
  */
-public class GetMp3 extends AsyncTask<Void, Void, Integer> {
+public class GetMp3 extends APICalls {
 
     private static final String TAG = "GetMP3";
-    private String token;
-    private int idUser;
     private String name;
-    private ProgressBar progressBar;
     private ListView listView;
-    Activity actividad;
 
-    public GetMp3 (String t, int idUser, String archivo, Activity act, ProgressBar pbar, ListView lv){
-        this.actividad = act;
-        this.token = t;
+    public GetMp3 (String token, int idUser, String archivo, Activity act, ListView lv, View progress, View container ){
+        super(idUser, token, act, progress, container);
         this.name = archivo;
-        this.idUser = idUser;
-        this.progressBar = pbar;
         this.listView = lv;
     }
 
     @Override
     protected  Integer doInBackground(Void... params) {
-
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
         int totalSize = 0;
 
         try {
-            url = new URL (Connection.getHost()+"media?id="+this.idUser+"&name="+this.name);
+            url = new URL (Connection.getHost()+"media?id="+super.getIdUser()+"&name="+this.name);
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
             InputStream is = urlConnection.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             totalSize = urlConnection.getContentLength();
 
             if (urlConnection.getResponseCode() == 200){
-                FileOutputStream fos = this.actividad.openFileOutput(this.name, Context.MODE_PRIVATE);
+                FileOutputStream fos = super.getActivity().openFileOutput(this.name, Context.MODE_PRIVATE);
 
                 byte [] buffer = new byte[totalSize];
                 int byteRead = -1;
@@ -83,30 +76,16 @@ public class GetMp3 extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer res) {
-
+        super.showProgress(false);
         if (res == 200){
-            this.progressBar.setVisibility(View.GONE);
-            this.listView.setVisibility(View.VISIBLE);
-            Toast t = Toast.makeText(actividad,"Descarga realizada",Toast.LENGTH_SHORT);
+            //this.setVisibility(View.GONE);
+            //this.listView.setVisibility(View.VISIBLE);
+            Toast t = Toast.makeText(super.getActivity(),"Descarga realizada",Toast.LENGTH_SHORT);
             t.show();
         }else if (res == 406){
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    actividad.finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else{
-            Toast t = Toast.makeText(actividad,"Descarga no realizada... Codigo: "+res,Toast.LENGTH_SHORT);
+            Toast t = Toast.makeText(super.getActivity(),"Descarga no realizada... Codigo: "+res,Toast.LENGTH_SHORT);
             t.show();
         }
 

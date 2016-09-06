@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -29,6 +30,7 @@ public class PerformedTest extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     private static String token;
     private static int idUser;
+    private View progress, container;
 
 
     @Override
@@ -38,13 +40,16 @@ public class PerformedTest extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progress = findViewById(R.id.performedTestProgress);
+        container = findViewById(R.id.listView);
+
         Bundle extras = getIntent().getExtras();
         PerformedTest.token = (String)extras.get("token");
         PerformedTest.idUser = (int)extras.get("idUser");
 
         lista = (ListView) findViewById(R.id.listView);
 
-        GetTests userTests = new GetTests(PerformedTest.token, PerformedTest.idUser, PerformedTest.this, lista);
+        GetTests userTests = new GetTests(PerformedTest.token, PerformedTest.idUser, PerformedTest.this, lista, progress, container);
         userTests.execute();
 
         //para que no salga la flecha en la toolbar

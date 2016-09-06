@@ -39,6 +39,7 @@ public class CuestionarioExam extends AppCompatActivity {
     private RadioButton rbC;
     private RadioButton rbD;
     private int contador;
+    private View progress, container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class CuestionarioExam extends AppCompatActivity {
         CuestionarioExam.testQ = (List<Pregunta>)extras.get("preguntas");
 
         //CONTROLES
+        progress = findViewById(R.id.cuestionarioExamProgress);
+        container = findViewById(R.id.LinearLayout_textExam);
         next = (Button) findViewById(R.id.btnNextCuestionario);
         txtPregunta = (EditText) findViewById(R.id.txtPregunta);
         rButtons = (RadioGroup)findViewById(R.id.rGroup);
@@ -141,7 +144,8 @@ public class CuestionarioExam extends AppCompatActivity {
                 Toast t = Toast.makeText(act,"Guardando resultado...", Toast.LENGTH_SHORT);
                 t.show();
                 UpdateCuestionario uTest = new UpdateCuestionario(CuestionarioExam.token, CuestionarioExam.idCuest, CuestionarioExam.idUser,
-                        CuestionarioExam.fallos, CuestionarioExam.testQ.size(), CuestionarioExam.this);
+                        CuestionarioExam.fallos, CuestionarioExam.testQ.size(), CuestionarioExam.this,
+                        progress, container);
                 uTest.execute();
                 //finish();
             }

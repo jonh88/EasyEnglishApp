@@ -56,7 +56,7 @@ public class Resources_mp3 extends AppCompatActivity {
         pBar = (ProgressBar)findViewById(R.id.downloadProgress);
 
         //OBTENGO LOS MP3 DISPONIBLES EN EL SERVER
-        GetResources getMp3 = new GetResources(token, idUser, Resources_mp3.this, lvResources);
+        GetResources getMp3 = new GetResources(token, idUser, Resources_mp3.this, lvResources, pBar, lvResources);
         getMp3.execute();
 
         lvResources.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,7 +72,7 @@ public class Resources_mp3 extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //descargar audio
                         showProgress(true);
-                        GetMp3 des = new GetMp3(token, idUser,selected, Resources_mp3.this, pBar, lvResources);
+                        GetMp3 des = new GetMp3(token, idUser,selected, Resources_mp3.this, lvResources, pBar, lvResources);
                         des.execute();
 
                     }

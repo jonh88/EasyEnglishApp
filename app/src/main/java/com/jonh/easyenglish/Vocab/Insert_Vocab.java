@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ public class Insert_Vocab extends AppCompatActivity {
     private static int idUser;
     private EditText txtEnglish;
     private EditText txtSpanish;
+    private View progressBar, container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +63,11 @@ public class Insert_Vocab extends AppCompatActivity {
         txtSpanish = (EditText) findViewById(R.id.txtSpanish);
         spin = (Spinner) findViewById(R.id.spnVocabType);
         btnSave = (Button) findViewById(R.id.btnSave);
+        progressBar = (ProgressBar)findViewById(R.id.insertVocProgress);
+        container = (LinearLayout) findViewById(R.id.insertVocContainer);
 
         //LLENAR SPINNER
-        GetTipos llenarSpin = new GetTipos(spin, Insert_Vocab.idUser,Insert_Vocab.token, Insert_Vocab.this);
+        GetTipos llenarSpin = new GetTipos(spin, Insert_Vocab.idUser,Insert_Vocab.token, Insert_Vocab.this, progressBar, container);
         llenarSpin.execute();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +101,7 @@ public class Insert_Vocab extends AppCompatActivity {
                     }
                     nVoc.setTipo(tipo);
                     //tarea que guarda el voc
-                    InsertarVoc insert = new InsertarVoc(nVoc, Insert_Vocab.idUser, Insert_Vocab.token, txtSpanish, txtEnglish, spin, Insert_Vocab.this);
+                    InsertarVoc insert = new InsertarVoc(nVoc, Insert_Vocab.idUser, Insert_Vocab.token, txtSpanish, txtEnglish, spin, Insert_Vocab.this, progressBar, container);
                     insert.execute();
 
                 }
