@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Cuestionario.Cuestionario">
+    <item
+        android:id="@+id/mMain"
+        android:title="@string/mMain"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mGramatica"
+        android:title="@string/mGramatica"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mTest"
+        android:title="@string/mTest"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mVocabulario"
+        android:title="@string/mVocabulario"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mCuestionario"
+        android:title="@string/mCuestionario"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mAudio"
+        android:title="@string/mAudio"
+        app:showAsAction="never" />
+</menu>
