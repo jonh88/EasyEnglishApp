@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -81,10 +84,56 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this,GrammarView.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
                 startActivity(i);
             }
         });
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_app, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent i;
+        switch (item.getItemId()){
+            case R.id.mGramatica:
+                i = new Intent (MainActivity.this, GrammarView.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mTest:
+                i = new Intent(MainActivity.this, TestsActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mVocabulario:
+                i = new Intent(MainActivity.this, Vocabulary.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mCuestionario:
+                i = new Intent(MainActivity.this, Cuestionario.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mAudio:
+                i = new Intent(MainActivity.this,Audios.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            default: return true;
+        }
+    }
 }

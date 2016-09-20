@@ -56,6 +56,12 @@
     <string name="Cuestionario">Cuestionario</string>
     <string name="Audio">Audio</string>
     <string name="next">Siguiente</string>
-
+    <!-- opciones menu-->
+    <string name="mGramatica">Gramatica</string>
+    <string name="mTest">Test</string>
+    <string name="mVocabulario">Vocabulario</string>
+    <string name="mCuestionario">Cuestionario</string>
+    <string name="mAudio">Audio</string>
+    <string name="mMain">Principal</string>
 
 </resources>
