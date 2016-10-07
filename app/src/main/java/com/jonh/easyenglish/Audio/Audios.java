@@ -1,6 +1,9 @@
 package com.jonh.easyenglish.Audio;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -62,6 +65,30 @@ public class Audios extends AppCompatActivity {
 
         //para que no salga la flecha en la toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        SharedPreferences preferences = getPreferences(0);
+        boolean msg = preferences.getBoolean("expAudio", true);
+
+        if (msg){
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Audios.this);
+            dialogBuilder.setTitle("Ayuda");
+            dialogBuilder.setMessage("Puedes ver los audios disponibles para descargar" +
+                    " o ver los ya descargados.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, null);
+            dialogBuilder.setNeutralButton("No mostrar de nuevo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences preferences = getPreferences(0);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("expAudio");
+                    editor.putBoolean("expAudio", false);
+                    editor.commit();
+                }
+            });
+
+            AlertDialog descargaDialog = dialogBuilder.create();
+            descargaDialog.show();
+        }
     }
 
     @Override

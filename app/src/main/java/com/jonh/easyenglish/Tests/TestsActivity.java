@@ -1,6 +1,9 @@
 package com.jonh.easyenglish.Tests;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +69,29 @@ public class TestsActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences preferences = getPreferences(0);
+        boolean msg = preferences.getBoolean("expTest", true);
+
+        if (msg){
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TestsActivity.this);
+            dialogBuilder.setTitle("Ayuda");
+            dialogBuilder.setMessage("Puedes crear nuevos tests a partir de los vocabularios que hayas" +
+                    " insertado o revisar los que hayas realizado.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, null);
+            dialogBuilder.setNeutralButton("No mostrar de nuevo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences preferences = getPreferences(0);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("expTest");
+                    editor.putBoolean("expTest", false);
+                    editor.commit();
+                }
+            });
+
+            AlertDialog descargaDialog = dialogBuilder.create();
+            descargaDialog.show();
+        }
     }
 
     @Override

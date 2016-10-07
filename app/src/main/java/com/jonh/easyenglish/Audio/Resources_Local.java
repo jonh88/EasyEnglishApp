@@ -61,6 +61,8 @@ public class Resources_Local extends AppCompatActivity {
                 itemSelected = adapterList.getItem(position);
                 Intent i = new Intent(Resources_Local.this,Player.class);
                 i.putExtra("fichero",itemSelected);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
                 startActivity(i);
             }
         });

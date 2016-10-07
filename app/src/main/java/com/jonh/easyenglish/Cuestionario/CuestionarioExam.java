@@ -175,13 +175,13 @@ public class CuestionarioExam extends AppCompatActivity {
         int idx = rButtons.indexOfChild(rButton);
 
         switch (idx){
-            case 0: respuestas.add("a");
+            case 0: respuestas.add("A");
                     break;
-            case 1: respuestas.add("b");
+            case 1: respuestas.add("B");
                     break;
-            case 2: respuestas.add("c");
+            case 2: respuestas.add("C");
                     break;
-            case 3: respuestas.add("d");
+            case 3: respuestas.add("D");
                     break;
         }
     }

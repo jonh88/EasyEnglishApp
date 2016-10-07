@@ -1,6 +1,9 @@
 package com.jonh.easyenglish.Vocab;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -56,6 +59,31 @@ public class Vocabulary extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        SharedPreferences preferences = getPreferences(0);
+        boolean msg = preferences.getBoolean("expVoc", true);
+
+        if (msg){
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Vocabulary.this);
+            dialogBuilder.setTitle("Ayuda");
+            dialogBuilder.setMessage("Puedes insertar nuevas palabras que vayas aprendiendo" +
+                    " o visualizar las que ya hayas insertado.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, null);
+            dialogBuilder.setNeutralButton("No mostrar de nuevo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences preferences = getPreferences(0);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("expVoc");
+                    editor.putBoolean("expVoc", false);
+                    editor.commit();
+                }
+            });
+
+            AlertDialog descargaDialog = dialogBuilder.create();
+            descargaDialog.show();
+        }
+
         //para que no salga la flecha en la toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }

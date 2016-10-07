@@ -1,6 +1,9 @@
 package com.jonh.easyenglish;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -89,6 +92,34 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        SharedPreferences preferences = getPreferences(0);
+        boolean msg = preferences.getBoolean("expLogin", true);
+
+        if (msg){
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            dialogBuilder.setTitle("Bienvenido");
+            dialogBuilder.setMessage("Bienvenido a Easy English!!\n" +
+                    "Con esta aplicación podrás guardar las palabras que vayas aprendiendo," +
+                    " realizar tests sobre las palabras que has guardado," +
+                    " cuestionarios con preguntas existentes en la plataforma," +
+                    " descargar audios para entrenar la comprensión o" +
+                    " consultar apartados específicos de gramática.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, null);
+            dialogBuilder.setNeutralButton("No mostrar de nuevo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences preferences = getPreferences(0);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("expLogin");
+                    editor.putBoolean("expLogin", false);
+                    editor.commit();
+                }
+            });
+
+            AlertDialog descargaDialog = dialogBuilder.create();
+            descargaDialog.show();
+        }
 
     }
 
