@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,32 +27,27 @@ import java.util.List;
 /**
  * Created by jonh on 17/08/16.
  */
-public class GetCuestionarios extends AsyncTask<Void, Void, Integer> {
+public class GetCuestionarios extends APICalls {
 
     private static final String TAG = "GetCuestionarios";
-    private String token;
-    private int idUser;
     private List<Cuestionario> cuestionarios;
-    private Activity actividad;
     ListView lista;
 
-    public GetCuestionarios (String t, int idUser, Activity act, ListView lv){
-        this.token = t;
-        this.idUser = idUser;
-        this.actividad = act;
+    public GetCuestionarios (String token, int idUser, Activity act, ListView lv, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.lista = lv;
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
-
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"users/"+this.idUser+"/cuestionarios?id="+this.idUser);
+            url = new URL (Connection.getHost()+"users/"+super.getIdUser()+"/cuestionarios?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
 
             if (urlConnection.getResponseCode() == 200){
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -71,7 +67,6 @@ public class GetCuestionarios extends AsyncTask<Void, Void, Integer> {
             }
 
             return urlConnection.getResponseCode();
-
         } catch (Exception e) {
             Log.e(GetCuestionarios.TAG, e.getMessage(),e);
             return -1;
@@ -82,7 +77,7 @@ public class GetCuestionarios extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute (final Integer resp){
-
+        super.showProgress(false);
         if (resp == 200){
             ArrayList<String> cuestionariosString =  new ArrayList<String>();
             //rellenar el arrayAdapter con los test del usuario
@@ -90,31 +85,17 @@ public class GetCuestionarios extends AsyncTask<Void, Void, Integer> {
                 cuestionariosString.add(t.toString());
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(actividad,android.R.layout.simple_list_item_1,cuestionariosString);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(super.getActivity(),android.R.layout.simple_list_item_1,cuestionariosString);
             lista.setAdapter(adapter);
 
         }else if (resp == 204){
-            Toast t = Toast.makeText(actividad,"No se ha realizado ningún cuestionario todavía", Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"No se ha realizado ningún cuestionario todavía", Toast.LENGTH_LONG);
             t.show();
 
         } else if (resp == 406) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    actividad.finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else {
-            Toast t = Toast.makeText(actividad,"Ha habido un error al obtener los cuestionarios realizados... :( Codigo: "+resp, Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"Ha habido un error al obtener los cuestionarios realizados... :( Codigo: "+resp, Toast.LENGTH_LONG);
             t.show();
         }
     }

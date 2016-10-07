@@ -13,6 +13,11 @@
     tools:context=".Cuestionario.CuestionarioExam"
     tools:showIn="@layout/activity_cuestionario_exam">
 
+    <!-- Login progress -->
+    <ProgressBar android:id="@+id/cuestionarioExamProgress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/LinearLayout_textExam"
         android:orientation="vertical"
@@ -20,6 +25,7 @@
         android:layout_height="match_parent">
 
         <EditText
+            android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"

@@ -1,19 +1,29 @@
 package com.jonh.easyenglish.Audio;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jonh.easyenglish.Cuestionario.Cuestionario;
+import com.jonh.easyenglish.GrammarView;
+import com.jonh.easyenglish.MainActivity;
 import com.jonh.easyenglish.R;
+import com.jonh.easyenglish.Tests.TestsActivity;
+import com.jonh.easyenglish.Vocab.Vocabulary;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class Player extends AppCompatActivity {
@@ -30,6 +40,8 @@ public class Player extends AppCompatActivity {
     private TextView txtDuration;
     private TextView txtTitle;
     private Handler myHandler = new Handler();
+    private String token;
+    private int idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,8 @@ public class Player extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         fichero =(String)extras.get("fichero");
+        token = (String) extras.get("token");
+        idUser = (int) extras.get("idUser");
 
         ruta = getFilesDir().getAbsolutePath()+"/"+fichero;
 
@@ -121,6 +135,57 @@ public class Player extends AppCompatActivity {
 
         //para que no salga la flecha en la toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_app, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent i;
+        switch (item.getItemId()){
+            case R.id.mMain:
+                i = new Intent(Player.this, MainActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mGramatica:
+                i = new Intent (Player.this, GrammarView.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mTest:
+                i = new Intent(Player.this, TestsActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mVocabulario:
+                i = new Intent(Player.this, Vocabulary.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mCuestionario:
+                i = new Intent(Player.this, Cuestionario.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mAudio:
+                i = new Intent(Player.this,Audios.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            default: return true;
+        }
     }
 
     private Runnable UpdateSongTime = new Runnable() {

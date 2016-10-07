@@ -3,6 +3,8 @@ package com.jonh.easyenglish;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -53,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        checkFirstRun();
+
         // CONTROLES
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -94,6 +99,9 @@ public class LoginActivity extends AppCompatActivity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                //ocultar teclado
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
                 ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
@@ -125,17 +133,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /*config
-        Button bSettings = (Button) findViewById(R.id.config_button);
-        bSettings.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this,Config.class);
-                startActivity(i);
-
-            }
-        });
-        */
     }
 
     private void rememeberData(){
@@ -155,7 +152,10 @@ public class LoginActivity extends AppCompatActivity {
     private void notRemeberData(){
         SharedPreferences preferences = getPreferences(0);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
+        editor.remove("email");
+        editor.remove("pass");
+        editor.remove("checked");
+        //editor.clear();
         editor.putBoolean("checked", false);
         editor.commit();
     }
@@ -229,4 +229,24 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 3;
     }
 
+    private void checkFirstRun(){
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        if (isFirstRun){
+
+            //añadir a preferencias mostrar explicaciones por defecto true
+            SharedPreferences preferences = getPreferences(0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("expTest", true);
+            editor.putBoolean("expVoc", true);
+            editor.putBoolean("expCuestionario", true);
+            editor.putBoolean("expAudio", true);
+            editor.putBoolean("expLogin", true);
+            editor.commit();
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRun", false)
+                    .apply();
+        }
+    }
 }

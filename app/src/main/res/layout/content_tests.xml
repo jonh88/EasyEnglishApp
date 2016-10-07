@@ -34,7 +34,6 @@
             android:textColor="@color/white"
             android:background="@drawable/layout_buttons"/>
 
-
     </LinearLayout>
 
 </RelativeLayout>

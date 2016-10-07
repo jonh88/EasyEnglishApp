@@ -9,14 +9,19 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_register" tools:context="com.jonh.easyenglish.Register">
 
+    <!-- Login progress -->
+    <ProgressBar android:id="@+id/registerProgress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
     <LinearLayout
+        android:id="@+id/registerContainer"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="false"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
-
 
         <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"

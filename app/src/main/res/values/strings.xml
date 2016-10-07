@@ -14,6 +14,8 @@
     <string name="show">Mostrar</string>
     <string name="title_activity_main">Principal</string>
     <string name="title_activity_tests">Tests</string>
+    <string name="test_explanation">Puedes crear nuevos tests a partir
+        de los vocabularios que hayas insertado o revisar los que hayas realizado</string>
     <string name="title_activity_test_config">Nuevo Test</string>
     <string name="title_activity_test_exam">Test Examen</string>
     <string name="title_activity_performed_test">Test Realizados</string>
@@ -54,6 +56,12 @@
     <string name="Cuestionario">Cuestionario</string>
     <string name="Audio">Audio</string>
     <string name="next">Siguiente</string>
-
+    <!-- opciones menu-->
+    <string name="mGramatica">Gramatica</string>
+    <string name="mTest">Test</string>
+    <string name="mVocabulario">Vocabulario</string>
+    <string name="mCuestionario">Cuestionario</string>
+    <string name="mAudio">Audio</string>
+    <string name="mMain">Principal</string>
 
 </resources>

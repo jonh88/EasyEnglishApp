@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,36 +25,34 @@ import java.net.URL;
 /**
  * Created by jonh on 16/08/16.
  */
-public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
+public class InsertarVoc extends APICalls {
 
     private static final String TAG = "InsertarVoc";
     Vocabulario voc;
-    private int idUser;
-    private String token;
     EditText sp, en;
     Spinner spin;
-    Context actividad;
 
-    public InsertarVoc (Vocabulario v, int id, String t, EditText spa, EditText eng, Spinner spin, Context act){
+
+    public InsertarVoc (Vocabulario v, int idUser, String token, EditText spa, EditText eng, Spinner spin, Activity act, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.voc = v;
-        this.idUser = id;
-        this.token = t;
         this.sp = spa;
         this.en = eng;
         this.spin = spin;
-        this.actividad = act;
+
     }
 
     @Override
     protected  Integer doInBackground(Void... params) {
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
             String jsonObject = new Gson().toJson(this.voc);
-            url = new URL (Connection.getHost()+"users/"+this.idUser+"/vocabulario?id="+this.idUser);
+            url = new URL (Connection.getHost()+"users/"+super.getIdUser()+"/vocabulario?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
             urlConnection.setDoOutput(true);
             urlConnection.setFixedLengthStreamingMode(jsonObject.getBytes().length); //gets system default chunk size
 
@@ -76,35 +75,21 @@ public class InsertarVoc extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer res) {
-
+        super.showProgress(false);
         if (res == 200){
             this.sp.setText("");
             this.en.setText("");
             this.spin.setSelection(0);
-            Toast t1 = Toast.makeText(this.actividad,"Insertado :)",Toast.LENGTH_SHORT);
+            Toast t1 = Toast.makeText(super.getActivity(),"Insertado :)",Toast.LENGTH_SHORT);
             t1.show();
         }else if (res == 304) {
-            Toast t1 = Toast.makeText(this.actividad, "Ya insertado", Toast.LENGTH_SHORT);
+            Toast t1 = Toast.makeText(super.getActivity(), "Ya insertado", Toast.LENGTH_SHORT);
             t1.show();
         }else if (res == 406){
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    ((Activity)actividad).finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else {
-            Toast t1 = Toast.makeText(this.actividad,"Error insertando vocabulario... :( Codigo: "+res,Toast.LENGTH_SHORT);
-            t1.show();
+            Toast.makeText(super.getActivity(),"Error insertando vocabulario... :( Codigo: "+res,Toast.LENGTH_SHORT).show();
+
         }
     }
 

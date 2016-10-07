@@ -3,11 +3,15 @@ package com.jonh.easyenglish.Cuestionario;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,10 +20,16 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.jonh.easyenglish.AsynchronusTasks.UpdateCuestionario;
+import com.jonh.easyenglish.Audio.Audios;
+import com.jonh.easyenglish.GrammarView;
+import com.jonh.easyenglish.MainActivity;
 import com.jonh.easyenglish.R;
+import com.jonh.easyenglish.Tests.TestsActivity;
+import com.jonh.easyenglish.Vocab.Vocabulary;
 import com.jonh.easyenglish.domain.Pregunta;
 import com.jonh.easyenglish.domain.Vocabulario;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +49,7 @@ public class CuestionarioExam extends AppCompatActivity {
     private RadioButton rbC;
     private RadioButton rbD;
     private int contador;
+    private View progress, container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +68,8 @@ public class CuestionarioExam extends AppCompatActivity {
         CuestionarioExam.testQ = (List<Pregunta>)extras.get("preguntas");
 
         //CONTROLES
+        progress = findViewById(R.id.cuestionarioExamProgress);
+        container = findViewById(R.id.LinearLayout_textExam);
         next = (Button) findViewById(R.id.btnNextCuestionario);
         txtPregunta = (EditText) findViewById(R.id.txtPregunta);
         rButtons = (RadioGroup)findViewById(R.id.rGroup);
@@ -106,18 +119,69 @@ public class CuestionarioExam extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_app, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent i;
+        switch (item.getItemId()){
+            case R.id.mMain:
+                i = new Intent(CuestionarioExam.this, MainActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mGramatica:
+                i = new Intent (CuestionarioExam.this, GrammarView.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mTest:
+                i = new Intent(CuestionarioExam.this, TestsActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mVocabulario:
+                i = new Intent(CuestionarioExam.this, Vocabulary.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mCuestionario:
+                i = new Intent(CuestionarioExam.this, Cuestionario.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mAudio:
+                i = new Intent(CuestionarioExam.this,Audios.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            default: return true;
+        }
+    }
+
     private void guardarRespuesta(int idSelected, final ArrayList<String> respuestas){
         View rButton = rButtons.findViewById(idSelected);
         int idx = rButtons.indexOfChild(rButton);
 
         switch (idx){
-            case 0: respuestas.add("a");
+            case 0: respuestas.add("A");
                     break;
-            case 1: respuestas.add("b");
+            case 1: respuestas.add("B");
                     break;
-            case 2: respuestas.add("c");
+            case 2: respuestas.add("C");
                     break;
-            case 3: respuestas.add("d");
+            case 3: respuestas.add("D");
                     break;
         }
     }
@@ -141,7 +205,8 @@ public class CuestionarioExam extends AppCompatActivity {
                 Toast t = Toast.makeText(act,"Guardando resultado...", Toast.LENGTH_SHORT);
                 t.show();
                 UpdateCuestionario uTest = new UpdateCuestionario(CuestionarioExam.token, CuestionarioExam.idCuest, CuestionarioExam.idUser,
-                        CuestionarioExam.fallos, CuestionarioExam.testQ.size(), CuestionarioExam.this);
+                        CuestionarioExam.fallos, CuestionarioExam.testQ.size(), CuestionarioExam.this,
+                        progress, container);
                 uTest.execute();
                 //finish();
             }

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -22,33 +23,31 @@ import java.net.URL;
 /**
  * Created by jonh on 19/08/16.
  */
-public class BorrarVocabulario extends AsyncTask<Void, Void, Integer> {
+public class BorrarVocabulario extends APICalls {
 
     private static final String TAG = "BorrarVocabulario";
-    private int idUser, idVoc, pos;
-    private String token;
-    Context actividad;
+    private int  idVoc, pos;
     ListView listView;
 
 
-    public BorrarVocabulario (String t, int id, int idVoc, ListView lv, int pos, Context act){
-        this.idUser = id;
+    public BorrarVocabulario (String t, int id, View progress, View container, int idVoc, ListView lv, int pos, Activity act){
+        super(id, t, act, progress, container);
         this.idVoc = idVoc;
-        this.token = t;
-        this.actividad = act;
         this.listView = lv;
         this.pos = pos;
     }
 
     @Override
     protected  Integer doInBackground(Void... params) {
+        super.showProgress(true);
+
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"users/"+this.idUser+"/vocabulario/"+this.idVoc+"?id="+this.idUser);
+            url = new URL (Connection.getHost()+"users/"+super.getIdUser()+"/vocabulario/"+this.idVoc+"?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
             urlConnection.setRequestMethod("DELETE");
 
             return urlConnection.getResponseCode();
@@ -63,38 +62,21 @@ public class BorrarVocabulario extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer res) {
-
+        super.showProgress(false);
         if (res == 200){
-            Toast t1 = Toast.makeText(this.actividad,"Borrado :)",Toast.LENGTH_SHORT);
+            Toast t1 = Toast.makeText(super.getActivity(),"Borrado :)",Toast.LENGTH_SHORT);
             t1.show();
             VocabArrayAdapter adapter = (VocabArrayAdapter) listView.getAdapter();
             Vocabulario v = adapter.getItem(pos);
             adapter.remove(v);
             adapter.notifyDataSetChanged();
         }else if (res == 304) {
-            Toast t1 = Toast.makeText(this.actividad, "No se ha borrado el vocabulario...", Toast.LENGTH_SHORT);
+            Toast t1 = Toast.makeText(super.getActivity(), "No se ha borrado el vocabulario...", Toast.LENGTH_SHORT);
             t1.show();
         }else if (res == 406){
-            //Toast.makeText(actividad,"Se ha caducado el token...", Toast.LENGTH_LONG).show();
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    ((Activity)actividad).finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
-
+            super.tokenExpired();
         }else {
-            Toast t1 = Toast.makeText(this.actividad,"Error borrando vocabulario... :( Codigo: "+res,Toast.LENGTH_SHORT);
+            Toast t1 = Toast.makeText(super.getActivity(),"Error borrando vocabulario... :( Codigo: "+res,Toast.LENGTH_SHORT);
             t1.show();
         }
     }

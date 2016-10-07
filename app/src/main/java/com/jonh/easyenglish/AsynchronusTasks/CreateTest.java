@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -24,30 +25,29 @@ import java.net.URL;
 /**
  * Created by jonh on 17/08/16.
  */
-public class CreateTest extends AsyncTask<Void, Void, Integer> {
+public class CreateTest extends APICalls {
 
     private static final String TAG = "CreateTest";
-    String token;
-    int numPreguntas, idUser, idTest;
-    Activity actividad;
 
-    public CreateTest (String t, int n, int id, Activity act){
-        this.token = t;
-        this.numPreguntas = n;
-        this.idUser = id;
-        this.actividad = act;
+    int numPreguntas, idTest;
+
+
+    public CreateTest (String token, int numQuestions, int idUser, Activity act, View progress, View container){
+        super(idUser, token, act, progress, container);
+        this.numPreguntas = numQuestions;
+
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
-
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"users/"+this.idUser+"/test?id="+this.idUser+"&num="+this.numPreguntas);
+            url = new URL (Connection.getHost()+"users/"+super.getIdUser()+"/test?id="+super.getIdUser()+"&num="+this.numPreguntas);
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
             urlConnection.setRequestMethod("POST");
 
             if (urlConnection.getResponseCode() == 200){
@@ -78,30 +78,16 @@ public class CreateTest extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute (final Integer resp){
-
+        super.showProgress(false);
         if (resp == 200){
             //llamar task getPreguntas;
-            GetTestPreguntas getQuestions = new GetTestPreguntas(this.token, this.idTest, this.idUser,this.actividad);
+            GetTestPreguntas getQuestions = new GetTestPreguntas(super.getToken(), this.idTest, super.getIdUser(),super.getActivity(), super.getProgress(), super.getContainer());
             getQuestions.execute();
-            this.actividad.finish();
+            super.getActivity().finish();
         }else if (resp == 406){
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(actividad, LoginActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                actividad.startActivity(i);
-                actividad.finish();
-                Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else {
-            Toast t = Toast.makeText(actividad, "Ha habido un error al crear el test... :(. Codigo: " + resp, Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(), "Ha habido un error al crear el test... :(. Codigo: " + resp, Toast.LENGTH_LONG);
             t.show();
         }
 

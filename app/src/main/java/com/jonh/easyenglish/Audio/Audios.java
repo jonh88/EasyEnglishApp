@@ -1,13 +1,24 @@
 package com.jonh.easyenglish.Audio;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.jonh.easyenglish.Cuestionario.Cuestionario;
+import com.jonh.easyenglish.GrammarView;
+import com.jonh.easyenglish.MainActivity;
 import com.jonh.easyenglish.R;
+import com.jonh.easyenglish.Tests.TestsActivity;
+import com.jonh.easyenglish.Vocab.Vocabulary;
 
 import java.io.Serializable;
 
@@ -54,6 +65,81 @@ public class Audios extends AppCompatActivity {
 
         //para que no salga la flecha en la toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        SharedPreferences preferences = getPreferences(0);
+        boolean msg = preferences.getBoolean("expAudio", true);
+
+        if (msg){
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Audios.this);
+            dialogBuilder.setTitle("Ayuda");
+            dialogBuilder.setMessage("Puedes ver los audios disponibles para descargar" +
+                    " o ver los ya descargados.");
+            dialogBuilder.setPositiveButton(android.R.string.ok, null);
+            dialogBuilder.setNeutralButton("No mostrar de nuevo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences preferences = getPreferences(0);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("expAudio");
+                    editor.putBoolean("expAudio", false);
+                    editor.commit();
+                }
+            });
+
+            AlertDialog descargaDialog = dialogBuilder.create();
+            descargaDialog.show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_app, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent i;
+        switch (item.getItemId()){
+            case R.id.mMain:
+                i = new Intent(Audios.this, MainActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mGramatica:
+                i = new Intent (Audios.this, GrammarView.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mTest:
+                i = new Intent(Audios.this, TestsActivity.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mVocabulario:
+                i = new Intent(Audios.this, Vocabulary.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            case R.id.mCuestionario:
+                i = new Intent(Audios.this, Cuestionario.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;
+            /*case R.id.mAudio:
+                i = new Intent(Audios.this,Audios.class);
+                i.putExtra("token",(Serializable)token);
+                i.putExtra("idUser",(Serializable)idUser);
+                startActivity(i);
+                return true;*/
+            default: return true;
+        }
     }
 
 }

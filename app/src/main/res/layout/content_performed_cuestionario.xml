@@ -13,6 +13,11 @@
     tools:context=".Cuestionario.PerformedCuestionario"
     tools:showIn="@layout/activity_performed_cuestionario">
 
+    <!-- Login progress -->
+    <ProgressBar android:id="@+id/performedCuestionarioProgress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
     <ListView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

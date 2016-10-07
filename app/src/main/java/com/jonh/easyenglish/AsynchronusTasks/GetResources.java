@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,32 +27,28 @@ import java.util.ArrayList;
 /**
  * Created by jonh on 18/08/16.
  */
-public class GetResources extends AsyncTask<Void, Void, Integer> {
+public class GetResources extends APICalls {
 
     private static final String TAG = "GetResources";
-    private String token;
-    private int idUser;
     private ArrayList<String> resources;
-    private Activity actividad;
     private ListView lvResources;
 
 
-    public GetResources (String t, int id, Activity act, ListView lv){
-        this.idUser = id;
-        this.token = t;
-        this.actividad = act;
+    public GetResources (String token, int idUser, Activity act, ListView lv, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.lvResources = lv;
     }
 
     @Override
     protected  Integer doInBackground(Void... params) {
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"media/resources?id="+this.idUser);
+            url = new URL (Connection.getHost()+"media/resources?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
             if (urlConnection.getResponseCode()==200){
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
@@ -81,6 +78,7 @@ public class GetResources extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer res) {
+        super.showProgress(false);
         if (res == 200){
             String [] data = new String[resources.size()];
 
@@ -88,26 +86,12 @@ public class GetResources extends AsyncTask<Void, Void, Integer> {
                 data[i] = resources.get(i);
             }
 
-            ArrayAdapter<String> adapterList = new ArrayAdapter<String>(actividad,android.R.layout.simple_list_item_1,data);
+            ArrayAdapter<String> adapterList = new ArrayAdapter<String>(super.getActivity(),android.R.layout.simple_list_item_1,data);
             lvResources.setAdapter(adapterList);
         }else if (res == 406){
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    actividad.finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else {
-            Toast t = Toast.makeText(actividad,"Ha habido un error al obtener los vocabularios :( Codigo: "+ res, Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"Ha habido un error al obtener los vocabularios :( Codigo: "+ res, Toast.LENGTH_LONG);
             t.show();
         }
 

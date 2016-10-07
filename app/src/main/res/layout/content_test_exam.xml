@@ -11,7 +11,7 @@
     tools:showIn="@layout/activity_test_exam" tools:context=".Tests.TestExam">
 
     <ProgressBar android:id="@+id/progressTestExam" style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_width="match_parent" android:layout_height="match_parent"
         android:layout_marginBottom="8dp" android:visibility="gone" />
 
     <LinearLayout
@@ -19,8 +19,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
 
         <EditText
             android:id="@+id/txtIdioma"

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,33 +29,29 @@ import java.util.List;
 /**
  * Created by jonh on 16/08/16.
  */
-public class GetVocabulariesTipo extends AsyncTask<Void, Void, Integer> {
+public class GetVocabulariesTipo extends APICalls {
 
     private static final String TAG = "GetVocTipos";
-    String token;
-    int idUser;
     int idTipo;
     private ArrayList<Vocabulario> lVocs;
-    Activity actividad;
     ListView listview;
 
-    public GetVocabulariesTipo (int id, String t, int tipo, ListView lv, Activity act){
-        this.token = t;
+    public GetVocabulariesTipo (int idUser, String token, int tipo, ListView lv, Activity act, View progress, View container){
+        super(idUser, token, act, progress, container);
         this.idTipo = tipo;
-        this.idUser = id;
-        this.actividad = act;
         this.listview = lv;
     }
 
     @Override
     protected  Integer doInBackground(Void... params) {
+        super.showProgress(true);
         URL url;
         HttpURLConnection urlConnection = null;
 
         try {
-            url = new URL (Connection.getHost()+"users/"+this.idUser+"/vocabularies?id="+this.idUser);
+            url = new URL (Connection.getHost()+"users/"+super.getIdUser()+"/vocabularies?id="+super.getIdUser());
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("token", this.token);
+            urlConnection.setRequestProperty("token", super.getToken());
 
             if (urlConnection.getResponseCode() == 200){
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -92,30 +89,16 @@ public class GetVocabulariesTipo extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(final Integer resp) {
-
+        super.showProgress(false);
         if (resp == 200){
-            VocabArrayAdapter customAdapter = new VocabArrayAdapter(actividad,lVocs);
+            VocabArrayAdapter customAdapter = new VocabArrayAdapter(super.getActivity(),lVocs);
             listview.setAdapter(customAdapter);
         }else if (resp == 406){
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(actividad);
-            dialogBuilder.setTitle("Token expirado");
-            dialogBuilder.setMessage("Ha expirado el token. Debe volver a iniciar sesión.");
-            dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(actividad, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    actividad.startActivity(i);
-                    actividad.finish();
-                    Runtime.getRuntime().exit(0);
-                }
-            });
-            AlertDialog exitAppDialog = dialogBuilder.create();
-            exitAppDialog.show();
+            super.tokenExpired();
         }else if (resp == 204){
-            Toast.makeText(actividad, "No existen vocabularios de este tipo.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(super.getActivity(), "No existen vocabularios de este tipo.", Toast.LENGTH_SHORT).show();
         }else{
-            Toast t = Toast.makeText(actividad,"Ha habido un error al obtener los vocabularios :( Codigo: "+resp, Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(super.getActivity(),"Ha habido un error al obtener los vocabularios :( Codigo: "+resp, Toast.LENGTH_LONG);
             t.show();
         }
     }
